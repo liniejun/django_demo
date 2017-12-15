@@ -4,6 +4,7 @@ $(function(){
 	var error_password = false;
 	var error_check_password = false;
 	var error_email = false;
+	var error_phone = false;
 	var error_check = false;
 
 
@@ -21,6 +22,10 @@ $(function(){
 
 	$('#email').blur(function() {
 		check_email();
+	});
+
+	$('#phone').blur(function() {
+		check_phone();
 	});
 
 	$('#allow').click(function() {
@@ -48,6 +53,12 @@ $(function(){
 		}
 		else
 		{
+			$.get('user/register_exist/?user_name='+$('#user_name').val(), function (data) {
+				if (data.count == 1) {
+					$('#user_name').next().html('用户名已经存在').show();
+					error_name = true;
+				}
+            })
 			$('#user_name').next().hide();
 			error_name = false;
 		}
@@ -99,7 +110,24 @@ $(function(){
 		{
 			$('#email').next().html('你输入的邮箱格式不正确')
 			$('#email').next().show();
-			error_check_password = true;
+			error_email = true;
+		}
+
+	}
+
+	function check_phone(){
+		var re = /^[1][3,4,5,7,8][0-9]{9}$/;
+
+		if(re.test($('#phone').val()))
+		{
+			$('#phone').next().hide();
+			error_phone = false;
+		}
+		else
+		{
+			$('#phone').next().html('你输入的手机号格式不正确')
+			$('#phone').next().show();
+			error_phone = true;
 		}
 
 	}
@@ -110,8 +138,9 @@ $(function(){
 		check_pwd();
 		check_cpwd();
 		check_email();
+		check_phone();
 
-		if(error_name == false && error_password == false && error_check_password == false && error_email == false && error_check == false)
+		if(error_name == false && error_password == false && error_check_password == false && error_email == false && error_phone == false && error_check == false)
 		{
 			return true;
 		}
