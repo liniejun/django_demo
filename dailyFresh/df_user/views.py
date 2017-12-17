@@ -44,7 +44,7 @@ def register_exist(request):
 
 def login(request):
     uname = request.COOKIES.get('user_name', '')
-    context = {'title': '用户登录', 'error_name': 0, 'error_pwd': 0, 'df_name': uname}
+    context = {'title': '用户登录', 'error_name': 0, 'error_pwd': 0, 'df_name': uname, 'page_name': 1}
     return render(request, 'df_user/login.html', context)
 
 def login_handle(request):
@@ -72,21 +72,21 @@ def login_handle(request):
             request.session['user_name'] = uname
             return red
         else:
-            context = {'title':'用户登录', 'error_name': 0, 'error_pwd': 1, 'df_name': uname, 'df_pwd': upwd}
+            context = {'title':'用户登录', 'error_name': 0, 'error_pwd': 1, 'df_name': uname, 'df_pwd': upwd, 'page_name': 1}
             return render(request, 'df_user/login.html', context)
     else:
-        context = {'title': '用户登录', 'error_name': 1, 'error_pwd': 0, 'df_name': uname, 'df_pwd': upwd}
+        context = {'title': '用户登录', 'error_name': 1, 'error_pwd': 0, 'df_name': uname, 'df_pwd': upwd, 'page_name': 1}
         return render(request, 'df_user/login.html', context)
 
 
 
 def info(request):
     user_email = UserInfo.objects.get(id=request.session['user_id']).df_email
-    context = {'title':'用户中心', 'user_email': user_email, 'user_name': request.session['user_name']}
+    context = {'title':'用户中心', 'user_email': user_email, 'user_name': request.session['user_name'], 'page_name': 1}
     return render(request, 'df_user/user_center_info.html')
 
 def order(request):
-    context = {'title': '用户中心'}
+    context = {'title': '用户中心', 'page_name': 1}
     return render(request, 'df_user/user_center_order.html', context)
 
 def site(request):
@@ -97,5 +97,5 @@ def site(request):
         user.df_addr = post.get('df_addr')
         user.df_emailCode = post.get('df_emailCode')
         user.save()
-    context = {'title':'用户中心', 'user':user}
+    context = {'title':'用户中心', 'user':user, 'page_name': 1}
     return render(request, 'df_user/user_center_site.html', context)
